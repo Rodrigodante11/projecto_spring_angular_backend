@@ -66,18 +66,32 @@ public class UsuarioController {
     public ResponseEntity obterUsuarioPorId(@PathVariable("id") Long id ){
         return usuarioService.obterPorId(id)
                 .map( usuario -> new ResponseEntity(
-                                Converter.usuarioConverter(usuario), HttpStatus.OK
+                                Converter.usuarioConverter(usuario),
+                                HttpStatus.OK
                         )
                 ).orElseGet( () -> new ResponseEntity<>("Usuario Não encontrado", HttpStatus.NOT_FOUND ));
     }
 
     @GetMapping()
-    public ResponseEntity obterTodosClientes(){
+    public ResponseEntity obterTodosUsuarios(){
         try {
-            List<Usuario> usuario = usuarioService.obterTodos();
-            return new ResponseEntity<>(usuario, HttpStatus.CREATED);
+            List<Usuario> usuarioList = usuarioService.obterTodos();
+            return new ResponseEntity<>(usuarioList, HttpStatus.OK);
         }catch (ErroUsuarioException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("/usuario_filtro")
+    public ResponseEntity usuario_filtro(@RequestBody UsuarioDTO usuarioDTO){
+        try {
+            Usuario usuario = Converter.usuarioConverter(usuarioDTO);
+            List<Usuario> usuarioList = usuarioService.buscar(usuario);
+            return new ResponseEntity<>(usuarioList, HttpStatus.OK);
+        }catch (ErroUsuarioException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
 }
