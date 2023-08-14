@@ -82,7 +82,16 @@ public class UsuarioController {
         }
     }
 
-
+    @PostMapping("/usuario_filtro")
+    public ResponseEntity usuario_filtro(@RequestBody UsuarioDTO usuarioDTO){
+        try {
+            Usuario usuario = Converter.usuarioConverter(usuarioDTO);
+            List<Usuario> usuarioList = usuarioService.buscar(usuario);
+            return new ResponseEntity<>(usuarioList, HttpStatus.OK);
+        }catch (ErroUsuarioException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 
 }
