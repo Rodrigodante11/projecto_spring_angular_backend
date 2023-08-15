@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 
@@ -22,24 +25,25 @@ public class Usuario {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column( nullable = false)
+
     private String nome;
 
     @Column()
     private String telefone;
 
-    @Column( nullable = false, unique = true)
+
+    @Column(unique = true)
     private String email;
 
-    @Column( nullable = false)
+
     private String senha;
 
     @Column(name = "data_cadastro", updatable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataCadastro;
 
-    @Column(name = "is_admin")
-    private boolean isAdmin;
+    @Column(name = "is_admin" , columnDefinition = "boolean default false")
+    private boolean isAdmin ;
 
     @PrePersist
     public  void prePersisist(){
