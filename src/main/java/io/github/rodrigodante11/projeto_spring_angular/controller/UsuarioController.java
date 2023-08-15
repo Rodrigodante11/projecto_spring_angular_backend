@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,7 +26,6 @@ public class UsuarioController {
         try{
             Usuario usuario = Converter.usuarioConverter(usuarioDTO);
 
-            usuario = usuarioService.salvar(usuario);
 
             return new ResponseEntity<>(usuario,HttpStatus.CREATED);
         }catch (ErroUsuarioException e){
@@ -33,9 +33,8 @@ public class UsuarioController {
         }
     }
 
-
     @PostMapping("/autenticar")
-    public ResponseEntity autenticarUsuario(@RequestBody UsuarioDTO usuarioDTO){
+    public ResponseEntity autenticarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO){
 
         try{
             Usuario usuarioAutenticado = usuarioService.autenticar(usuarioDTO.getEmail(), usuarioDTO.getSenha());
